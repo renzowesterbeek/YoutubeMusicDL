@@ -17,6 +17,7 @@ local.properties
 .loadpath
 musicFile.txt
 *.m4a
+*.mp4
 
 # External tool builders
 .externalToolBuilders/
@@ -215,3 +216,5 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+
+*.txt

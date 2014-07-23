@@ -39,12 +39,17 @@ if typeInput in videoOptions:
 else:
 	type = "Audio"
 
-print("Put in Youtube url(s), 1 per line; Put in empty line to start download.")	
+print("Put in Youtube url(s) or a textfile with url(s), 1 per line.")
+print("Put in empty line to start download.")	
+
 urlInput = "."
 urlList = []
 while urlInput != "":
 	urlInput = raw_input("")
-	urlList.append(urlInput)
+	if '.txt' in urlInput:
+		urlList = getDownloadList('musicFile.txt')
+	else:
+		urlList.append(urlInput)
 
 urlList.pop() # Remove last enter (nil) from list
 print("Download starting...")
