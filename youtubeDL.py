@@ -47,7 +47,7 @@ urlList = []
 while urlInput != "":
 	urlInput = raw_input("")
 	if '.txt' in urlInput:
-		urlList = getDownloadList('musicFile.txt')
+		urlList = getDownloadList(urlInput)
 	else:
 		urlList.append(urlInput)
 
