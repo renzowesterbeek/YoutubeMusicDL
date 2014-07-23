@@ -12,13 +12,25 @@ def getDownloadList():
 def downloadMusic(files):
 	for url in files:
 		audio = pafy.new(url)
-		audiofiles = []
 
 		audiofile = audio.getbestaudio(preftype="m4a")
 		myfilename = audiofile.title + "." + audiofile.extension
 
 		audiofile.download(filepath=myfilename)
+		
+def downloadVideo(files):
+	for url in files:
+		video = pafy.new(url)
 
-downloadMusic(getDownloadList())
+		videofile = video.getbest(preftype="mp4")
+		myfilename = videofile.title + "." + videofile.extension
+
+		videofile.download(filepath=myfilename)
+
+# There are 2 ways for passing url(s) in function
+# 1) downloadMusic/Video(getDownloadList())
+# 2) downloadMusic/Video(['https://www.youtube.com/watch?v=SYM-RJwSGQ8'])
+
+downloadVideo(['https://www.youtube.com/watch?v=SYM-RJwSGQ8'])
 	
 print("")
