@@ -1,8 +1,8 @@
 import pafy
 
-def getDownloadList():
+def getDownloadList(musicfile):
 	# Gets all the urls from musicfile
-	musicFile = open("musicFile.txt", "r")
+	musicFile = open(musicfile, "r")
 	downloadList = []
 	for url in musicFile:
 		downloadList.append(url.strip())
@@ -27,10 +27,6 @@ def downloadVideo(files):
 
 		videofile.download(filepath=myfilename)
 
-# There are 2 ways for passing url(s) in function
-# 1) downloadAudio/Video(getDownloadList())
-# 2) downloadAudio/Video(['https://www.youtube.com/watch?v=SYM-RJwSGQ8'])
-
 videoOptions = ["video", "Video", "v", "V"]
 audioOptions = ["audio", "Audio", "a", "A"]
 
@@ -44,7 +40,7 @@ else:
 	type = "Audio"
 
 print("Put in Youtube url(s), 1 per line; Put in empty line to start download.")	
-urlInput = "start"
+urlInput = "."
 urlList = []
 while urlInput != "":
 	urlInput = raw_input("")
@@ -52,6 +48,10 @@ while urlInput != "":
 
 urlList.pop() # Remove last enter (nil) from list
 print("Download starting...")
-downloadAudio(urlList)
+
+if type == "Video":
+	downloadVideo(urlList)
+else:
+	downloadAudio(urlList)
 	
 print("")
