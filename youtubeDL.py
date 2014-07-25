@@ -1,4 +1,13 @@
 import pafy
+import os
+import errno
+
+def make_sure_path_exists(path):
+    try:
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise
 
 def getDownloadList(musicfile):
 	# Gets all the urls from musicfile
@@ -14,7 +23,7 @@ def downloadAudio(files):
 		audio = pafy.new(url)
 
 		audiofile = audio.getbestaudio(preftype="m4a")
-		myfilename = audiofile.title + "." + audiofile.extension
+		myfilename = "YTDownloads/Audio/" + audiofile.title + "." + audiofile.extension
 
 		audiofile.download(filepath=myfilename)
 		
@@ -23,12 +32,14 @@ def downloadVideo(files):
 		video = pafy.new(url)
 
 		videofile = video.getbest(preftype="mp4")
-		myfilename = videofile.title + "." + videofile.extension
+		myfilename = "YTDownloads/Video/" + videofile.title + "." + videofile.extension
 
 		videofile.download(filepath=myfilename)
 
 videoOptions = ["video", "Video", "v", "V"]
 audioOptions = ["audio", "Audio", "a", "A"]
+
+make_sure_path_exists("YTDownloads")
 
 print("Want to download Video or Audio?")
 typeInput = ""
@@ -55,8 +66,10 @@ urlList.pop() # Remove last enter (nil) from list
 print("Download starting...")
 
 if type == "Video":
+	make_sure_path_exists("YTDownloads/Vidoe")
 	downloadVideo(urlList)
 else:
+	make_sure_path_exists("YTDownloads/Audio")
 	downloadAudio(urlList)
 	
 print("")

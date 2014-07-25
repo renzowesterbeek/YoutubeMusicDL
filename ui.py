@@ -39,12 +39,9 @@ urlList = []
 def addURL():
 	url = urlInput.get()
 	urlList.append(url)
-	outputName = "output" + url
-	outputName = StringVar()
-	outputName.set(url)
-	outputNameLabel = Label(app, textvariable=outputName)
-	outputNameLabel.pack()
+	writeToLog(url)
 	urlInput.delete(0, END)
+	print urlList
 
 def download():
 	if switchType() == "Video":
@@ -52,11 +49,23 @@ def download():
 	else:
 		downloadAudio(urlList)
 	status.set("Done")
+	del urlList[:]
+
+def writeToLog(msg):
+    numlines = log.index('end - 1 line').split('.')[0]
+    log['state'] = 'normal'
+    if numlines==24:
+        log.delete(1.0, 2.0)
+    if log.index('end-1c')!='1.0':
+        log.insert('end', '\n')
+    log.insert('end', msg)
+    log['state'] = 'disabled'
 
 # Basic window configuration #
 app = Tk()
 app.geometry("400x400")
 app.title("Python Youtube Downloader")
+Scrollbar(app)
 
 # Instructions text #
 welcomeText = IntVar()
@@ -82,10 +91,8 @@ addButton = Button(app, text="Add", command=addURL)
 addButton.pack()
 
 # Output Labels #
-output = StringVar()
-output.set("")
-outputLabel = Label(app, textvariable=output)
-outputLabel.pack()
+log = Text(app, state='disabled', width=60, height=10, wrap='none')
+log.pack()
 
 # Button #
 downloadButton = Button(app, text="Download", command=download)
