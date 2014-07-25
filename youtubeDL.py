@@ -9,7 +9,7 @@ def make_sure_path_exists(path):
         if exception.errno != errno.EEXIST:
             raise
 
-def getDownloadList(musicfile):
+def get_download_list(musicfile):
 	# Gets all the urls from musicfile
 	musicFile = open(musicfile, "r")
 	downloadList = []
@@ -18,7 +18,7 @@ def getDownloadList(musicfile):
 	musicFile.close()
 	return downloadList
 
-def downloadAudio(files):
+def download_audio(files):
 	for url in files:
 		audio = pafy.new(url)
 
@@ -27,7 +27,7 @@ def downloadAudio(files):
 
 		audiofile.download(filepath=myfilename)
 		
-def downloadVideo(files):
+def download_video(files):
 	for url in files:
 		video = pafy.new(url)
 
@@ -50,7 +50,7 @@ if typeInput in videoOptions:
 else:
 	type = "Audio"
 
-print("Put in Youtube url(s) or a textfile with url(s), 1 per line.")
+print("Enter Youtube url(s) or a textfile with url(s), 1 per line.")
 print("Put in empty line to start download.")	
 
 urlInput = "."
@@ -58,18 +58,18 @@ urlList = []
 while urlInput != "":
 	urlInput = raw_input("")
 	if '.txt' in urlInput:
-		urlList = getDownloadList(urlInput)
+		urlList = get_download_list(urlInput)
 	else:
 		urlList.append(urlInput)
 
-urlList.pop() # Remove last enter (nil) from list
+urlList.pop(-1) # Remove last enter (nil) from list
 print("Download starting...")
 
 if type == "Video":
-	make_sure_path_exists("YTDownloads/Vidoe")
-	downloadVideo(urlList)
+	make_sure_path_exists("YTDownloads/Video")
+	download_video(urlList)
 else:
 	make_sure_path_exists("YTDownloads/Audio")
-	downloadAudio(urlList)
+	download_audio(urlList)
 	
 print("")
