@@ -1,11 +1,35 @@
 import pafy
+import os
+import errno
 from Tkinter import *
+import tkMessageBox
 
-# input.get()
-# output.set()
+def make_sure_path_exists(path):
+    try:
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise
 
-def getDownloadList(musicfile):
-	# Gets all the urls from musicfile
+urlArray = []
+def add_url():
+	currentContent = urlList.get('1.0', 'end')
+	userEntry = urlEntry.get()
+	urlArray.append(userEntry)
+	urlList.configure(state='normal')
+	urlList.insert('end', userEntry + '\n')
+	urlList.configure(state='disabled')
+	
+	urlEntry.delete(0, END)
+	return
+
+def clear_dl_list():
+	urlList.configure(state='normal')
+	urlList.delete("1.0", END)
+	urlList.configure(state='disabled')
+	del urlArray[:]
+
+def get_download_list(musicfile):
 	musicFile = open(musicfile, "r")
 	downloadList = []
 	for url in musicFile:
@@ -13,95 +37,76 @@ def getDownloadList(musicfile):
 	musicFile.close()
 	return downloadList
 
-def downloadAudio(files):
+def download_audio(files):
 	for url in files:
 		audio = pafy.new(url)
 
 		audiofile = audio.getbestaudio(preftype="m4a")
-		myfilename = audiofile.title + "." + audiofile.extension
+		myfilename = "YTDownloads/Audio/" + audiofile.title + "." + audiofile.extension
 
 		audiofile.download(filepath=myfilename)
 		
-def downloadVideo(files):
+def download_video(files):
 	for url in files:
 		video = pafy.new(url)
 
 		videofile = video.getbest(preftype="mp4")
-		myfilename = videofile.title + "." + videofile.extension
+		myfilename = "YTDownloads/Video/" + videofile.title + "." + videofile.extension
 
 		videofile.download(filepath=myfilename)
 
-def switchType():
-	type = typeSelect.get()
-	return type
-
-urlList = []
-def addURL():
-	url = urlInput.get()
-	urlList.append(url)
-	writeToLog(url)
-	urlInput.delete(0, END)
-	print urlList
-
 def download():
-	if switchType() == "Video":
-		downloadVideo(urlList)
+	mode = relStatus.get()
+	if mode == "Audio":
+		make_sure_path_exists("YTDownloads/Audio/")
+		download_audio(urlArray)
 	else:
-		downloadAudio(urlList)
-	status.set("Done")
-	del urlList[:]
+		make_sure_path_exists("YTDownloads/Video/")
+		download_video(urlArray)
+		
+	tkMessageBox.showinfo("Done", "Your download is completed. You can find the downloaded files in the YTDownloads folder in the directory of this program.")
+	clear_dl_list()
+	print("")
+	
+	return
 
-def writeToLog(msg):
-    numlines = log.index('end - 1 line').split('.')[0]
-    log['state'] = 'normal'
-    if numlines==24:
-        log.delete(1.0, 2.0)
-    if log.index('end-1c')!='1.0':
-        log.insert('end', '\n')
-    log.insert('end', msg)
-    log['state'] = 'disabled'
+#url = "https://www.youtube.com/watch?v=W9he6KN4Aqk"
 
-# Basic window configuration #
+# =========================================================================== #
+
+make_sure_path_exists("YTDownloads")
+
 app = Tk()
-app.geometry("400x400")
 app.title("Python Youtube Downloader")
 Scrollbar(app)
 
-# Instructions text #
-welcomeText = IntVar()
-welcomeText.set("Input YouTube url(s) 1 by 1")
-welcome = Label(app, textvariable=welcomeText)
-welcome.pack()
+instructionText0 = StringVar()
+instructionText0.set("Select download mode")
+instructionLabel = Label(app, textvariable=instructionText0, height=2).grid(row=0, column=0, pady=5, padx=15)
 
-# Radiobutton #
-typeSelect = StringVar()
-R1 = Radiobutton(app, text="Video", variable=typeSelect, value="Video", command=switchType)
-R1.pack(anchor=CENTER)
-R1.deselect()
-R2 = Radiobutton(app, text="Audio", variable=typeSelect, value="Audio", command=switchType)
-R2.pack(anchor=CENTER)
-R2.select()
+instructionText1 = StringVar()
+instructionText1.set("Enter your Youtube URL(s) below")
+instructionLabel = Label(app, textvariable=instructionText1, height=2).grid(row=0, column=1, pady=5)
 
-# User input #
-urlInput = Entry(app)
-urlInput.pack()
+relStatus = StringVar()
+relStatus.set("Audio")
+modeSelect = Radiobutton(app, text="Audio", value="Audio", variable=relStatus).grid(row=1, column=0, sticky=W, padx=15)
+modeSelect = Radiobutton(app, text="Video", value="Video", variable=relStatus).grid(row=1, column=0, sticky=E, padx=15)
 
-# Button #
-addButton = Button(app, text="Add", command=addURL)
-addButton.pack()
+youtubeURL = StringVar(None)
+urlEntry = Entry(app, textvariable=youtubeURL, width=43)
+urlEntry.grid(row=1, column=1, sticky=N+E+W, padx=10)
 
-# Output Labels #
-log = Text(app, state='disabled', width=60, height=10, wrap='none')
-log.pack()
+urlList = Text(app, state='disabled', width=44, height=14)
+urlList.grid(row=3, column=1, padx=10)
 
-# Button #
-downloadButton = Button(app, text="Download", command=download)
-downloadButton.pack()
+actionButtonFrame = Frame(app)
+actionButtonFrame.grid(row=4, column=1)
 
-# Status Labels #
-status = StringVar()
-status.set("")
-statusLabel = Label(app, textvariable=status)
-statusLabel.pack()
+addButton = Button(app, text="Add", command=add_url).grid(row=2, column=1)
+clearButton = Button(actionButtonFrame, text="Clear", width=5, command=clear_dl_list)
+clearButton.grid(row=0, column=0, sticky=W, padx=5, pady=5)
+downloadButton = Button(actionButtonFrame, text="Download", width=10, command=download)
+downloadButton.grid(row=0, column=1, sticky=E, padx=5, pady=5)
 
 app.mainloop()
