@@ -12,6 +12,18 @@ def make_sure_path_exists(path):
         if exception.errno != errno.EEXIST:
             raise
 
+def retrieve_file():
+	try:
+		f = open("musicFile.txt")
+	except(IOError), e:
+		print("File not found", e)
+	else:
+		for line in f:
+			urlArray.append(line.strip())
+			print(line.strip())
+		print urlArray
+		f.close()
+
 urlArray = []
 def add_url():
 	currentContent = urlList.get('1.0', 'end')
@@ -32,9 +44,9 @@ def clear_dl_list():
 
 def get_download_list(musicfile):
 	musicFile = open(musicfile, "r")
-	downloadList = []
+	#downloadList = []
 	for url in musicFile:
-		downloadList.append(url.strip())
+		urlArray.append(url.strip())
 	musicFile.close()
 	return downloadList
 
@@ -81,6 +93,15 @@ Scrollbar(app)
 standardFont = tkFont.Font(family="Helvetica", size=14, weight="normal")
 footerFont = tkFont.Font(family="Helvetica", size=12, weight="normal")
 
+# Configure menu
+menubar = Menu(app)
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="Load", command=retrieve_file)
+filemenu.add_separator()
+filemenu.add_command(label="Quit", command=app.quit)
+menubar.add_cascade(label="File", menu=filemenu)
+app.config(menu=menubar)
+
 # Text to display instructions to the user
 instructionText0 = StringVar()
 instructionText0.set("Select download mode")
@@ -88,7 +109,7 @@ instructionLabel0 = Label(app, textvariable=instructionText0, height=2)
 instructionLabel0.grid(row=0, column=0, pady=5, padx=15)
 
 instructionText1 = StringVar()
-instructionText1.set("Enter your Youtube URL(s) below")
+instructionText1.set("Enter Youtube URL(s) below")
 instructionLabel1 = Label(app, textvariable=instructionText1, height=2)
 instructionLabel1.grid(row=0, column=1, pady=5)
 
@@ -106,7 +127,7 @@ urlEntry = Entry(app, textvariable=youtubeURL, width=43)
 urlEntry.grid(row=1, column=1, sticky=N+E+W, padx=10)
 
 # Display of all entered urls
-urlList = Text(app, state='disabled', width=44, height=14, font=standardFont)
+urlList = Text(app, state='disabled', width=44, height=12, font=standardFont)
 urlList.grid(row=3, column=1, padx=10)
 
 # Frame containing buttons
