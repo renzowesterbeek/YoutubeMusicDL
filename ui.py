@@ -1,3 +1,7 @@
+# UI Version of the Python Youtube downloader 
+# App by Renzo Westerbeek - 2014
+# Example Youtube URL: https://www.youtube.com/watch?v=E2qxVhP46Yk
+
 import pafy
 import os
 import errno
@@ -42,13 +46,16 @@ def add_url(url):
 	urlList.insert('end', url + '\n')
 	urlList.configure(state='disabled')
 	
-	urlEntry.delete(0, END) # Clears entry field
+	urlEntry.delete(0, END)
 
 def clear_url_list():
 	urlList.configure(state='normal')
 	urlList.delete("1.0", END)
 	urlList.configure(state='disabled')
 	del urlArray[:]
+
+def return_pressed(event):
+	add_url(urlEntry.get())
 
 def download_audio(files):
 	for url in files:
@@ -84,13 +91,12 @@ def download():
 		clear_url_list()
 		progressDisplayText.set("")
 
-# =========================================================================== #
+# ============================= UI Configuration ======================================= #
 
 make_sure_path_exists("YTDownloads")
 
 app = Tk()
 app.title("Python Youtube Downloader")
-Scrollbar(app)
 standardFont = tkFont.Font(family="Helvetica", size=14, weight="normal")
 footerFont = tkFont.Font(family="Helvetica", size=12, weight="normal")
 monoFont = tkFont.Font(family="Courier", size=12, weight="normal")
@@ -142,7 +148,9 @@ actionButtonFrame = Frame(app)
 actionButtonFrame.grid(row=4, column=1)
 
 # Buttons
-addButton = Button(app, text="Add", command= lambda: add_url(urlEntry.get())).grid(row=2, column=1)
+addButton = Button(app, text="Add", command= lambda: add_url(urlEntry.get()))
+addButton.grid(row=2, column=1)
+app.bind("<Return>", return_pressed)
 clearButton = Button(actionButtonFrame, text="Clear", width=5, command=clear_url_list)
 clearButton.grid(row=0, column=0, sticky=W, padx=5, pady=5)
 downloadButton = Button(actionButtonFrame, text="Download", width=10, command=download)
