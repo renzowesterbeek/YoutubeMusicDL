@@ -71,8 +71,6 @@ def download():
 	
 	return
 
-#url = "https://www.youtube.com/watch?v=W9he6KN4Aqk"
-
 # =========================================================================== #
 
 make_sure_path_exists("YTDownloads")
@@ -83,29 +81,39 @@ Scrollbar(app)
 standardFont = tkFont.Font(family="Helvetica", size=14, weight="normal")
 footerFont = tkFont.Font(family="Helvetica", size=12, weight="normal")
 
+# Text to display instructions to the user
 instructionText0 = StringVar()
 instructionText0.set("Select download mode")
-instructionLabel = Label(app, textvariable=instructionText0, height=2).grid(row=0, column=0, pady=5, padx=15)
+instructionLabel0 = Label(app, textvariable=instructionText0, height=2)
+instructionLabel0.grid(row=0, column=0, pady=5, padx=15)
 
 instructionText1 = StringVar()
 instructionText1.set("Enter your Youtube URL(s) below")
-instructionLabel = Label(app, textvariable=instructionText1, height=2).grid(row=0, column=1, pady=5)
+instructionLabel1 = Label(app, textvariable=instructionText1, height=2)
+instructionLabel1.grid(row=0, column=1, pady=5)
 
+# Radio buttons
 relStatus = StringVar()
 relStatus.set("Audio")
-modeSelect = Radiobutton(app, text="Audio", value="Audio", variable=relStatus).grid(row=1, column=0, sticky=W, padx=15)
-modeSelect = Radiobutton(app, text="Video", value="Video", variable=relStatus).grid(row=1, column=0, sticky=E, padx=15)
+modeSelect = Radiobutton(app, text="Audio", value="Audio", variable=relStatus)
+modeSelect.grid(row=1, column=0, sticky=W, padx=15)
+modeSelect = Radiobutton(app, text="Video", value="Video", variable=relStatus)
+modeSelect.grid(row=1, column=0, sticky=E, padx=15)
 
+# URL Entryfield
 youtubeURL = StringVar(None)
 urlEntry = Entry(app, textvariable=youtubeURL, width=43)
 urlEntry.grid(row=1, column=1, sticky=N+E+W, padx=10)
 
+# Display of all entered urls
 urlList = Text(app, state='disabled', width=44, height=14, font=standardFont)
 urlList.grid(row=3, column=1, padx=10)
 
+# Frame containing buttons
 actionButtonFrame = Frame(app)
 actionButtonFrame.grid(row=4, column=1)
 
+# Buttons
 addButton = Button(app, text="Add", command=add_url).grid(row=2, column=1)
 clearButton = Button(actionButtonFrame, text="Clear", width=5, command=clear_dl_list)
 clearButton.grid(row=0, column=0, sticky=W, padx=5, pady=5)
@@ -114,6 +122,7 @@ downloadButton.grid(row=0, column=1, sticky=E, padx=5, pady=5)
 
 footerText = StringVar()
 footerText.set("App by Renzo Westerbeek")
-footer = Label(app, textvariable=footerText, height=2, font=footerFont).grid(row=4, column=0, padx=5, sticky=SW)
+footer = Label(app, textvariable=footerText, height=2, font=footerFont)
+footer.grid(row=4, column=0, padx=5, sticky=SW)
 
 app.mainloop()
