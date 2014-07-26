@@ -3,6 +3,7 @@ import os
 import errno
 from Tkinter import *
 import tkMessageBox
+import tkFont
 
 def make_sure_path_exists(path):
     try:
@@ -56,17 +57,17 @@ def download_video(files):
 		videofile.download(filepath=myfilename)
 
 def download():
-	mode = relStatus.get()
-	if mode == "Audio":
-		make_sure_path_exists("YTDownloads/Audio/")
-		download_audio(urlArray)
-	else:
-		make_sure_path_exists("YTDownloads/Video/")
-		download_video(urlArray)
+	if urlArray != []:
+		mode = relStatus.get()
+		if mode == "Audio":
+			make_sure_path_exists("YTDownloads/Audio/")
+			download_audio(urlArray)
+		else:
+			make_sure_path_exists("YTDownloads/Video/")
+			download_video(urlArray)
 		
-	tkMessageBox.showinfo("Done", "Your download is completed. You can find the downloaded files in the YTDownloads folder in the directory of this program.")
-	clear_dl_list()
-	print("")
+		tkMessageBox.showinfo("Done", "Your download is completed. You can find the downloaded files in the YTDownloads folder in the directory of this program.")
+		clear_dl_list()
 	
 	return
 
@@ -79,6 +80,8 @@ make_sure_path_exists("YTDownloads")
 app = Tk()
 app.title("Python Youtube Downloader")
 Scrollbar(app)
+standardFont = tkFont.Font(family="Helvetica", size=14, weight="normal")
+footerFont = tkFont.Font(family="Helvetica", size=12, weight="normal")
 
 instructionText0 = StringVar()
 instructionText0.set("Select download mode")
@@ -97,7 +100,7 @@ youtubeURL = StringVar(None)
 urlEntry = Entry(app, textvariable=youtubeURL, width=43)
 urlEntry.grid(row=1, column=1, sticky=N+E+W, padx=10)
 
-urlList = Text(app, state='disabled', width=44, height=14)
+urlList = Text(app, state='disabled', width=44, height=14, font=standardFont)
 urlList.grid(row=3, column=1, padx=10)
 
 actionButtonFrame = Frame(app)
@@ -108,5 +111,9 @@ clearButton = Button(actionButtonFrame, text="Clear", width=5, command=clear_dl_
 clearButton.grid(row=0, column=0, sticky=W, padx=5, pady=5)
 downloadButton = Button(actionButtonFrame, text="Download", width=10, command=download)
 downloadButton.grid(row=0, column=1, sticky=E, padx=5, pady=5)
+
+footerText = StringVar()
+footerText.set("App by Renzo Westerbeek")
+footer = Label(app, textvariable=footerText, height=2, font=footerFont).grid(row=4, column=0, padx=5, sticky=SW)
 
 app.mainloop()
