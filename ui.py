@@ -20,22 +20,19 @@ def retrieve_file():
 	else:
 		for line in f:
 			theLine = line.strip()
-			urlArray.append(theLine)
-			urlList.configure(state='normal')
-			urlList.insert('end', theLine + '\n')
-			urlList.configure(state='disabled')
+			add_url(theLine)
 		f.close()
 
 urlArray = []
-def add_url():
+def add_url(url):
 	currentContent = urlList.get('1.0', 'end')
-	userEntry = urlEntry.get()
-	urlArray.append(userEntry)
+	urlArray.append(url)
 	urlList.configure(state='normal')
-	urlList.insert('end', userEntry + '\n')
+	urlList.insert('end', url + '\n')
 	urlList.configure(state='disabled')
 	
 	urlEntry.delete(0, END)
+	print urlArray
 	return
 
 def clear_dl_list():
@@ -137,7 +134,7 @@ actionButtonFrame = Frame(app)
 actionButtonFrame.grid(row=4, column=1)
 
 # Buttons
-addButton = Button(app, text="Add", command=add_url).grid(row=2, column=1)
+addButton = Button(app, text="Add", command= lambda: add_url(urlEntry.get())).grid(row=2, column=1)
 clearButton = Button(actionButtonFrame, text="Clear", width=5, command=clear_dl_list)
 clearButton.grid(row=0, column=0, sticky=W, padx=5, pady=5)
 downloadButton = Button(actionButtonFrame, text="Download", width=10, command=download)
