@@ -14,14 +14,16 @@ def make_sure_path_exists(path):
 
 def retrieve_file():
 	try:
-		f = open("musicFile.txt")
+		f = open("musicfile.txt")
 	except(IOError), e:
-		print("File not found", e)
+		tkMessageBox.showinfo("File Not Found", "The file 'musicfile.txt' doesn't exist in the app directory. Please create it.")
 	else:
 		for line in f:
-			urlArray.append(line.strip())
-			print(line.strip())
-		print urlArray
+			theLine = line.strip()
+			urlArray.append(theLine)
+			urlList.configure(state='normal')
+			urlList.insert('end', theLine + '\n')
+			urlList.configure(state='disabled')
 		f.close()
 
 urlArray = []
