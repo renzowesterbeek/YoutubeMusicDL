@@ -31,11 +31,9 @@ def add_url(url):
 	urlList.insert('end', url + '\n')
 	urlList.configure(state='disabled')
 	
-	urlEntry.delete(0, END)
-	print urlArray
-	return
+	urlEntry.delete(0, END) # Clears entry field
 
-def clear_dl_list():
+def clear_url_list():
 	urlList.configure(state='normal')
 	urlList.delete("1.0", END)
 	urlList.configure(state='disabled')
@@ -43,7 +41,6 @@ def clear_dl_list():
 
 def get_download_list(musicfile):
 	musicFile = open(musicfile, "r")
-	#downloadList = []
 	for url in musicFile:
 		urlArray.append(url.strip())
 	musicFile.close()
@@ -67,6 +64,7 @@ def download_video(files):
 
 		videofile.download(filepath=myfilename)
 
+# Choose either video or audio function based on radiobutton input
 def download():
 	if urlArray != []:
 		mode = relStatus.get()
@@ -77,10 +75,9 @@ def download():
 			make_sure_path_exists("YTDownloads/Video/")
 			download_video(urlArray)
 		
+		# Runs after completing download function
 		tkMessageBox.showinfo("Done", "Your download is completed. You can find the downloaded files in the YTDownloads folder in the directory of this program.")
-		clear_dl_list()
-	
-	return
+		clear_url_list()
 
 # =========================================================================== #
 
@@ -135,11 +132,12 @@ actionButtonFrame.grid(row=4, column=1)
 
 # Buttons
 addButton = Button(app, text="Add", command= lambda: add_url(urlEntry.get())).grid(row=2, column=1)
-clearButton = Button(actionButtonFrame, text="Clear", width=5, command=clear_dl_list)
+clearButton = Button(actionButtonFrame, text="Clear", width=5, command=clear_url_list)
 clearButton.grid(row=0, column=0, sticky=W, padx=5, pady=5)
 downloadButton = Button(actionButtonFrame, text="Download", width=10, command=download)
 downloadButton.grid(row=0, column=1, sticky=E, padx=5, pady=5)
 
+# Footer text
 footerText = StringVar()
 footerText.set("App by Renzo Westerbeek")
 footer = Label(app, textvariable=footerText, height=2, font=footerFont)
