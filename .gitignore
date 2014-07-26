@@ -15,7 +15,6 @@ local.properties
 .classpath
 .settings/
 .loadpath
-musicFile.txt
 *.m4a
 *.mp4
 
@@ -217,4 +216,5 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 
-*.txt
+musicfile.txt
+*.pyc

@@ -1,3 +1,7 @@
+# Console Version of the Python Youtube downloader 
+# App by Renzo Westerbeek - 2014
+# Example Youtube URL: https://www.youtube.com/watch?v=E2qxVhP46Yk
+
 import pafy
 import os
 import errno
