@@ -23,6 +23,17 @@ def retrieve_file():
 			add_url(theLine)
 		f.close()
 
+def download_progress(total, recvd, ratio, rate, eta):
+	recievedMB = recvd / 1048576.0
+	roundMB = round(recievedMB, 2)
+	percentage = round(ratio * 100, 1)
+	eta = int(round(eta,0))
+	dlrate = round(rate,0)
+	downloadOutput = str(roundMB) + " MBs (" + str(percentage) + "%) received. \nRate: " + str(dlrate) + "KB/s. \nETA: " + str(eta) + " secs."
+	progressDisplay.config(text=progressDisplayText)
+	progressDisplay.update_idletasks()
+	progressDisplayText.set(downloadOutput)
+
 urlArray = []
 def add_url(url):
 	currentContent = urlList.get('1.0', 'end')
@@ -39,13 +50,6 @@ def clear_url_list():
 	urlList.configure(state='disabled')
 	del urlArray[:]
 
-def get_download_list(musicfile):
-	musicFile = open(musicfile, "r")
-	for url in musicFile:
-		urlArray.append(url.strip())
-	musicFile.close()
-	return downloadList
-
 def download_audio(files):
 	for url in files:
 		audio = pafy.new(url)
@@ -53,7 +57,7 @@ def download_audio(files):
 		audiofile = audio.getbestaudio(preftype="m4a")
 		myfilename = "YTDownloads/Audio/" + audiofile.title + "." + audiofile.extension
 
-		audiofile.download(filepath=myfilename)
+		audiofile.download(filepath=myfilename, callback=download_progress, quiet=True)
 		
 def download_video(files):
 	for url in files:
@@ -62,7 +66,7 @@ def download_video(files):
 		videofile = video.getbest(preftype="mp4")
 		myfilename = "YTDownloads/Video/" + videofile.title + "." + videofile.extension
 
-		videofile.download(filepath=myfilename)
+		videofile.download(filepath=myfilename, callback=download_progress, quiet=True)
 
 # Choose either video or audio function based on radiobutton input
 def download():
@@ -78,6 +82,7 @@ def download():
 		# Runs after completing download function
 		tkMessageBox.showinfo("Done", "Your download is completed. You can find the downloaded files in the YTDownloads folder in the directory of this program.")
 		clear_url_list()
+		progressDisplayText.set("")
 
 # =========================================================================== #
 
@@ -88,6 +93,7 @@ app.title("Python Youtube Downloader")
 Scrollbar(app)
 standardFont = tkFont.Font(family="Helvetica", size=14, weight="normal")
 footerFont = tkFont.Font(family="Helvetica", size=12, weight="normal")
+monoFont = tkFont.Font(family="Courier", size=12, weight="normal")
 
 # Configure menu
 menubar = Menu(app)
@@ -109,6 +115,10 @@ instructionText1.set("Enter Youtube URL(s) below")
 instructionLabel1 = Label(app, textvariable=instructionText1, height=2)
 instructionLabel1.grid(row=0, column=1, pady=5)
 
+progressDisplayText = StringVar()
+progressDisplay = Label(app, textvariable=progressDisplayText, height=3, width=30, font=monoFont)
+progressDisplay.grid(row=2, column=0, pady=5)
+
 # Radio buttons
 relStatus = StringVar()
 relStatus.set("Audio")
@@ -121,6 +131,7 @@ modeSelect.grid(row=1, column=0, sticky=E, padx=15)
 youtubeURL = StringVar(None)
 urlEntry = Entry(app, textvariable=youtubeURL, width=43)
 urlEntry.grid(row=1, column=1, sticky=N+E+W, padx=10)
+urlEntry.focus()
 
 # Display of all entered urls
 urlList = Text(app, state='disabled', width=44, height=12, font=standardFont)
