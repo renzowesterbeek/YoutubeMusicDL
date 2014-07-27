@@ -9,7 +9,8 @@ _Small Python app for downloading audio and video from Youtube. Written in Pytho
 
 ### Installation
 1. Download zip from [GitHub](https://github.com/renzowesterbeek/YoutubeMusicDL/releases)
-2. Unpack .zip 
-3. Run setup.py
-	`./setup.py install`
-4. Done!
+2. Unpack .zip
+3. Done!
+
+### Usage
+Either run `python ui-dl.py` for the version with User Interface or run `python console-dl.py` for the console-only version of the tool. 
