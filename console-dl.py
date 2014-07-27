@@ -1,6 +1,5 @@
 # Console Version of the Python Youtube downloader 
 # App by Renzo Westerbeek - 2014
-# Example Youtube URL: https://www.youtube.com/watch?v=E2qxVhP46Yk
 
 import pafy
 import os
@@ -13,13 +12,13 @@ def make_sure_path_exists(path):
         if exception.errno != errno.EEXIST:
             raise
 
-def get_download_list(musicfile):
-	# Gets all the urls from musicfile
-	musicFile = open(musicfile, "r")
+def get_download_list(urlfile):
+	# Gets all the urls from urlfile
+	urlfile = open(urlfile, "r")
 	downloadList = []
-	for url in musicFile:
+	for url in urlfile:
 		downloadList.append(url.strip())
-	musicFile.close()
+	urlfile.close()
 	return downloadList
 
 def download_audio(files):

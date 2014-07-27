@@ -1,6 +1,5 @@
 # UI Version of the Python Youtube downloader 
 # App by Renzo Westerbeek - 2014
-# Example Youtube URL: https://www.youtube.com/watch?v=E2qxVhP46Yk
 
 import pafy
 import os
@@ -18,9 +17,9 @@ def make_sure_path_exists(path):
 
 def retrieve_file():
 	try:
-		f = open("musicfile.txt")
+		f = open("urlfile.txt")
 	except(IOError), e:
-		tkMessageBox.showinfo("File Not Found", "The file 'musicfile.txt' doesn't exist in the app directory. Please create it.")
+		tkMessageBox.showinfo("File Not Found", "The file 'urlfile.txt' doesn't exist in the app directory. Please create it.")
 	else:
 		for line in f:
 			theLine = line.strip()
