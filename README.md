@@ -4,7 +4,7 @@ _Small Python app for downloading audio and video from Youtube. Written in Pytho
 ### Included
 * Command line tool
 * Tkinter User Interface
-* Pafy Youtube API
+* [Pafy](https://github.com/np1/pafy) Youtube API
 
 
 ### Installation
