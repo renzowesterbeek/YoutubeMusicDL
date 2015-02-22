@@ -6,47 +6,43 @@ import os
 import errno
 execfile("general.py") # Includes generalfunctions file
 
+# Gets all the urls from urlfile
 def get_download_list(urlfile):
-	# Gets all the urls from urlfile
 	urlfile = open(urlfile, "r")
 	downloadList = []
 	for url in urlfile:
 		downloadList.append(url.strip())
 	urlfile.close()
+	
 	return downloadList
 
-def download_audio(files):
+def download_files(files, dltype):
 	for url in files:
-		audio = pafy.new(url)
-
-		audiofile = audio.getbestaudio(preftype="m4a")
-		myfilename = "YTDownloads/Audio/" + audiofile.title + "." + audiofile.extension
-
-		audiofile.download(filepath=myfilename)
+		thefile = pafy.new(url)
+		if(dltype == "Video"):
+			file = thefile.getbest(preftype="mp4")
+		else:
+			file = thefile.getbestaudio(preftype="m4a")
 		
-def download_video(files):
-	for url in files:
-		video = pafy.new(url)
+		myfilename = "Downloads/"+dltype+"/" + file.title + "." + file.extension
 
-		videofile = video.getbest(preftype="mp4")
-		myfilename = "YTDownloads/Video/" + videofile.title + "." + videofile.extension
-
-		videofile.download(filepath=myfilename)
+		file.download(filepath=myfilename)
 
 videoOptions = ["video", "Video", "v", "V"]
 audioOptions = ["audio", "Audio", "a", "A"]
 
-make_sure_path_exists("YTDownloads")
-
-print("Want to download Video or Audio?")
+# Choose video or audio mode
+print("Want to download video or audio?")
 typeInput = ""
-while typeInput not in videoOptions and typeInput not in audioOptions:
-	typeInput = raw_input("V/A? ")
-if typeInput in videoOptions:
-	type = "Video"
-else:
-	type = "Audio"
 
+while typeInput not in videoOptions and typeInput not in audioOptions:
+	typeInput = raw_input("video or audio? (v/a) ")
+if typeInput in videoOptions:
+	dltype = "Video"
+else:
+	dltype = "Audio"
+
+# Adding urls to list
 print("Enter Youtube url(s) or a textfile with url(s), 1 per line.")
 print("Put in empty line to start download.")	
 
@@ -60,13 +56,10 @@ while urlInput != "":
 		urlList.append(urlInput)
 
 urlList.pop(-1) # Remove last enter (nil) from list
-print("Download starting...")
 
-if type == "Video":
-	make_sure_path_exists("YTDownloads/Video")
-	download_video(urlList)
-else:
-	make_sure_path_exists("YTDownloads/Audio")
-	download_audio(urlList)
+# Start download
+print("Download starting...")
+make_sure_path_exists("Downloads/" + dltype)
+download_files(urlList, dltype)
 	
 print("")
