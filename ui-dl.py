@@ -7,18 +7,31 @@ import errno
 from Tkinter import *
 import tkMessageBox
 import tkFont
+import tkFileDialog
 execfile("general.py") # Includes generalfunctions file
 
 def retrieve_file():
+	progressDisplay.config(text=progressDisplayText)
+	progressDisplayText.set("Opening file...")
+	filepath = tkFileDialog.askopenfilename()
 	try:
-		f = open("urlfile.txt")
+		f = open(filepath)
 	except(IOError), e:
-		tkMessageBox.showinfo("File Not Found", "The file 'urlfile.txt' doesn't exist in the app directory. Please create it.")
+		tkMessageBox.showinfo("There was an error when trying to load your url file. Please try again...")
 	else:
 		for line in f:
 			theLine = line.strip()
 			add_url(theLine)
 		f.close()
+	progressDisplayText.set("")
+
+def askopenfilename(self):
+	# get filename
+	filename = tkFileDialog.askopenfilename(**self.file_opt)
+	
+	# open file on your own
+	if filename:
+		return open(filename, 'r')
 
 def download_progress(total, recvd, ratio, rate, eta):
 	recievedMB = recvd / 1048576.0
@@ -87,7 +100,7 @@ monoFont = tkFont.Font(family="Courier", size=12, weight="normal")
 # Configure menu
 menubar = Menu(app)
 filemenu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="Load", command=retrieve_file)
+filemenu.add_command(label="Open", command=retrieve_file)
 filemenu.add_separator()
 filemenu.add_command(label="Quit", command=app.quit)
 menubar.add_cascade(label="File", menu=filemenu)
