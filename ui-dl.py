@@ -7,13 +7,7 @@ import errno
 from Tkinter import *
 import tkMessageBox
 import tkFont
-
-def make_sure_path_exists(path):
-    try:
-        os.makedirs(path)
-    except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise
+execfile("general.py") # Includes generalfunctions file
 
 def retrieve_file():
 	try:

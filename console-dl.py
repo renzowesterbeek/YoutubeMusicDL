@@ -4,13 +4,7 @@
 import pafy
 import os
 import errno
-
-def make_sure_path_exists(path):
-    try:
-        os.makedirs(path)
-    except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise
+execfile("general.py") # Includes generalfunctions file
 
 def get_download_list(urlfile):
 	# Gets all the urls from urlfile
