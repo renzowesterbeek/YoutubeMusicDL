@@ -55,7 +55,7 @@ def download_audio(files):
 		audio = pafy.new(url)
 
 		audiofile = audio.getbestaudio(preftype="m4a")
-		myfilename = "YTDownloads/Audio/" + audiofile.title + "." + audiofile.extension
+		myfilename = "Downloads/Audio/" + audiofile.title + "." + audiofile.extension
 
 		audiofile.download(filepath=myfilename, callback=download_progress, quiet=True)
 		
@@ -64,7 +64,7 @@ def download_video(files):
 		video = pafy.new(url)
 
 		videofile = video.getbest(preftype="mp4")
-		myfilename = "YTDownloads/Video/" + videofile.title + "." + videofile.extension
+		myfilename = "Downloads/Video/" + videofile.title + "." + videofile.extension
 
 		videofile.download(filepath=myfilename, callback=download_progress, quiet=True)
 
@@ -73,20 +73,20 @@ def download():
 	if urlArray != []:
 		mode = relStatus.get()
 		if mode == "Audio":
-			make_sure_path_exists("YTDownloads/Audio/")
+			make_sure_path_exists("Downloads/Audio/")
 			download_audio(urlArray)
 		else:
-			make_sure_path_exists("YTDownloads/Video/")
+			make_sure_path_exists("Downloads/Video/")
 			download_video(urlArray)
 		
 		# Runs after completing download function
-		tkMessageBox.showinfo("Done", "Your download is completed. You can find the downloaded files in the YTDownloads folder in the directory of this program.")
+		tkMessageBox.showinfo("Done", "Your download is completed. You can find the downloaded files in the Downloads folder in the directory of this program.")
 		clear_url_list()
 		progressDisplayText.set("")
 
 # ============================= UI Configuration ======================================= #
 
-make_sure_path_exists("YTDownloads")
+make_sure_path_exists("Downloads")
 
 app = Tk()
 app.title("Python Youtube Downloader")
