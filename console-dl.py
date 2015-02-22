@@ -33,6 +33,18 @@ def download_video(files):
 
 		videofile.download(filepath=myfilename)
 
+def download_files(files, dltype):
+	for url in files:
+		thefile = pafy.new(url)
+		if(dltype == "Video"):
+			file = video.getbest(preftype="mp4")
+		else:
+			file = video.getbestaudio(preftype="m4a")
+		
+		myfilename = "YTDownloads/"+dltype+"/" + file.title + "." + file.extension
+
+		file.download(filepath=myfilename)
+
 videoOptions = ["video", "Video", "v", "V"]
 audioOptions = ["audio", "Audio", "a", "A"]
 
