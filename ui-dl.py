@@ -1,5 +1,5 @@
 # UI Version of the Python Youtube downloader 
-# App by Renzo Westerbeek - 2014
+# App by Renzo Westerbeek - 2015
 
 import pafy
 import os
@@ -8,7 +8,14 @@ from Tkinter import *
 import tkMessageBox
 import tkFont
 import tkFileDialog
+import webbrowser
 execfile("general.py") # Includes generalfunctions file
+
+urlArray = []
+
+def openRepo():
+	webbrowser.open("http://github.com/renzowesterbeek/pyYoutubeDownloader.git",new=2)
+
 
 def retrieve_file():
 	progressDisplay.config(text=progressDisplayText)
@@ -25,14 +32,6 @@ def retrieve_file():
 		f.close()
 	progressDisplayText.set("")
 
-def askopenfilename(self):
-	# get filename
-	filename = tkFileDialog.askopenfilename(**self.file_opt)
-	
-	# open file on your own
-	if filename:
-		return open(filename, 'r')
-
 def download_progress(total, recvd, ratio, rate, eta):
 	recievedMB = recvd / 1048576.0
 	roundMB = round(recievedMB, 2)
@@ -44,7 +43,6 @@ def download_progress(total, recvd, ratio, rate, eta):
 	progressDisplay.update_idletasks()
 	progressDisplayText.set(downloadOutput)
 
-urlArray = []
 def add_url(url):
 	currentContent = urlList.get('1.0', 'end')
 	urlArray.append(url)
@@ -100,6 +98,7 @@ monoFont = tkFont.Font(family="Courier", size=12, weight="normal")
 # Configure menu
 menubar = Menu(app)
 filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="View on GitHub", command=openRepo)
 filemenu.add_command(label="Open", command=retrieve_file)
 filemenu.add_separator()
 filemenu.add_command(label="Quit", command=app.quit)
