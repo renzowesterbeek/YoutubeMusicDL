@@ -50,24 +50,6 @@ def clear_url_list():
 def return_pressed(event):
 	add_url(urlEntry.get())
 
-def download_audio(files):
-	for url in files:
-		audio = pafy.new(url)
-
-		audiofile = audio.getbestaudio(preftype="m4a")
-		myfilename = "Downloads/Audio/" + audiofile.title + "." + audiofile.extension
-
-		audiofile.download(filepath=myfilename, callback=download_progress, quiet=True)
-		
-def download_video(files):
-	for url in files:
-		video = pafy.new(url)
-
-		videofile = video.getbest(preftype="mp4")
-		myfilename = "Downloads/Video/" + videofile.title + "." + videofile.extension
-
-		videofile.download(filepath=myfilename, callback=download_progress, quiet=True)
-
 def download_files(files, dltype):
 	for url in files:
 		thefile = pafy.new(url)
