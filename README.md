@@ -1,4 +1,4 @@
-## Python Youtube Downloader
+# Python Youtube Downloader
 _Small Python app for downloading audio and video from Youtube. Written in Python 2.7.5._
 
 ### Included
@@ -20,5 +20,5 @@ _Small Python app for downloading audio and video from Youtube. Written in Pytho
 
 ## Usage
 1. Start terminal/cmd
-2. Navigate to app directory (YoutubeMusicDL/)
+2. Navigate to app directory (ex. YoutubeMusicDL/)
 3. Either run `python ui-dl.py` for the version with User Interface or run `python console-dl.py` for the console-only version of the tool.
