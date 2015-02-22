@@ -16,24 +16,6 @@ def get_download_list(urlfile):
 	
 	return downloadList
 
-def download_audio(files):
-	for url in files:
-		audio = pafy.new(url)
-
-		audiofile = audio.getbestaudio(preftype="m4a")
-		myfilename = "Downloads/Audio/" + audiofile.title + "." + audiofile.extension
-
-		audiofile.download(filepath=myfilename)
-		
-def download_video(files):
-	for url in files:
-		video = pafy.new(url)
-
-		videofile = video.getbest(preftype="mp4")
-		myfilename = "Downloads/Video/" + videofile.title + "." + videofile.extension
-
-		videofile.download(filepath=myfilename)
-
 def download_files(files, dltype):
 	for url in files:
 		thefile = pafy.new(url)
@@ -49,12 +31,10 @@ def download_files(files, dltype):
 videoOptions = ["video", "Video", "v", "V"]
 audioOptions = ["audio", "Audio", "a", "A"]
 
-make_sure_path_exists("Downloads")
-
+# Choose video or audio mode
 print("Want to download video or audio?")
 typeInput = ""
 
-# Choose video or audio mode
 while typeInput not in videoOptions and typeInput not in audioOptions:
 	typeInput = raw_input("video or audio? (v/a) ")
 if typeInput in videoOptions:
