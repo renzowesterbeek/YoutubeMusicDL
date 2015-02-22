@@ -68,16 +68,24 @@ def download_video(files):
 
 		videofile.download(filepath=myfilename, callback=download_progress, quiet=True)
 
+def download_files(files, dltype):
+	for url in files:
+		thefile = pafy.new(url)
+		if(dltype == "Video"):
+			file = thefile.getbest(preftype="mp4")
+		else:
+			file = thefile.getbestaudio(preftype="m4a")
+		
+		myfilename = "Downloads/"+dltype+"/" + file.title + "." + file.extension
+
+		file.download(filepath=myfilename, callback=download_progress, quiet=True)
+
 # Choose either video or audio function based on radiobutton input
 def download():
 	if urlArray != []:
 		mode = relStatus.get()
-		if mode == "Audio":
-			make_sure_path_exists("Downloads/Audio/")
-			download_audio(urlArray)
-		else:
-			make_sure_path_exists("Downloads/Video/")
-			download_video(urlArray)
+		make_sure_path_exists("Downloads/"+mode+"/")
+		download_files(urlArray, mode)
 		
 		# Runs after completing download function
 		tkMessageBox.showinfo("Done", "Your download is completed. You can find the downloaded files in the Downloads folder in the directory of this program.")
