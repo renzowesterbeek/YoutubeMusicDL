@@ -50,43 +50,33 @@ def clear_url_list():
 def return_pressed(event):
 	add_url(urlEntry.get())
 
-def download_audio(files):
+def download_files(files, dltype):
 	for url in files:
-		audio = pafy.new(url)
-
-		audiofile = audio.getbestaudio(preftype="m4a")
-		myfilename = "YTDownloads/Audio/" + audiofile.title + "." + audiofile.extension
-
-		audiofile.download(filepath=myfilename, callback=download_progress, quiet=True)
+		thefile = pafy.new(url)
+		if(dltype == "Video"):
+			file = thefile.getbest(preftype="mp4")
+		else:
+			file = thefile.getbestaudio(preftype="m4a")
 		
-def download_video(files):
-	for url in files:
-		video = pafy.new(url)
+		myfilename = "Downloads/"+dltype+"/" + file.title + "." + file.extension
 
-		videofile = video.getbest(preftype="mp4")
-		myfilename = "YTDownloads/Video/" + videofile.title + "." + videofile.extension
-
-		videofile.download(filepath=myfilename, callback=download_progress, quiet=True)
+		file.download(filepath=myfilename, callback=download_progress, quiet=True)
 
 # Choose either video or audio function based on radiobutton input
 def download():
 	if urlArray != []:
 		mode = relStatus.get()
-		if mode == "Audio":
-			make_sure_path_exists("YTDownloads/Audio/")
-			download_audio(urlArray)
-		else:
-			make_sure_path_exists("YTDownloads/Video/")
-			download_video(urlArray)
+		make_sure_path_exists("Downloads/"+mode+"/")
+		download_files(urlArray, mode)
 		
 		# Runs after completing download function
-		tkMessageBox.showinfo("Done", "Your download is completed. You can find the downloaded files in the YTDownloads folder in the directory of this program.")
+		tkMessageBox.showinfo("Done", "Your download is completed. You can find the downloaded files in the Downloads folder in the directory of this program.")
 		clear_url_list()
 		progressDisplayText.set("")
 
 # ============================= UI Configuration ======================================= #
 
-make_sure_path_exists("YTDownloads")
+make_sure_path_exists("Downloads")
 
 app = Tk()
 app.title("Python Youtube Downloader")
